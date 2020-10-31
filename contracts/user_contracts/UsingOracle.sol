@@ -1,13 +1,9 @@
 pragma solidity ^0.5.0;
 
-import '../interface/OracleInterface.sol';
-
 contract usingOracle {
 
   address private owner;
   address private oracleAddress;
-
-  OracleInterface oracle;
 
   mapping(uint256 => bool) public requestsOpen;
 
@@ -20,13 +16,11 @@ contract usingOracle {
 
   constructor(address _oracleAddress) public {
     oracleAddress = _oracleAddress;
-    oracle = OracleInterface(oracleAddress);
     owner = msg.sender;
   }
 
   function updateOracleAddress(address _newOracleAddress) external onlyOwner{
     oracleAddress = _newOracleAddress;
-    oracle = OracleInterface(oracleAddress);
   }
 
   /**
@@ -36,11 +30,24 @@ contract usingOracle {
   * It could be anything generic too, as long as the data response in a integer.
   */
   function requestData(uint256 _apiId) internal {
-    uint256 _id = oracle.getRequestedData(_apiId);
+    uint256 _id;
+    address _oracleImpl = oracleAddress;
+    bytes memory _calldata = abi.encodeWithSignature('getRequestedData(uint256)', _apiId);
+
+    assembly {
+      let result := call(gas, _oracleImpl, 0, add(_calldata, 32), mload(_calldata), 0, 0)
+      let ptr := mload(0x40)
+      returndatacopy(ptr, 0, returndatasize)
+      _id := mload(ptr)
+    }
+
     requestsOpen[_id] = true;
     emit NewRequest(_id, _apiId);
   }
 
+  /**
+  * @dev Access using low level call from the oracle
+  */
   function requestCallback(uint256 _id, uint256 _data) public isValidCall(_id){
     latestResponse[_id] = _data;
     delete requestsOpen[_id];

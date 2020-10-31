@@ -3,6 +3,8 @@ pragma solidity ^0.5.0;
 contract EternalStorage {
   mapping(bytes32 => address) addressVars;
   mapping(bytes32 => uint256) uintVars;
+  
+  mapping(uint256 => address) pendingRequests;
 
   function getAddressVar(bytes32 _key) internal view returns(address){
     return addressVars[_key];

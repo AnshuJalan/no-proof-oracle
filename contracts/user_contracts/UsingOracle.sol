@@ -29,7 +29,7 @@ contract UsingOracle {
   * @dev Data is the Eth price in USD for this implementation.
   * It could be anything generic too, as long as the data response in a integer.
   */
-  function requestData(uint256 _apiId) external {
+  function requestData(uint256 _apiId) public returns(uint256) {
     uint256 _id;
     address _oracleImpl = oracleAddress;
     bytes memory _calldata = abi.encodeWithSignature('getRequestedData(uint256)', _apiId);
@@ -43,6 +43,8 @@ contract UsingOracle {
 
     requestsOpen[_id] = true;
     emit NewRequest(_id, _apiId);
+
+    return _id;
   }
 
   /**

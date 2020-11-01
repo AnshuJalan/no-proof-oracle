@@ -1,13 +1,13 @@
 pragma solidity ^0.5.0;
 
-contract usingOracle {
+contract UsingOracle {
 
   address private owner;
   address private oracleAddress;
 
   mapping(uint256 => bool) public requestsOpen;
 
-  //Native to this implementation. Records the latest reponse for a particular apiId;
+  //Native to this implementation. Records the latest reponse for a particular requestId;
   mapping(uint256 => uint256) public latestResponse;
 
   event NewOracleAddress(address newOracleAddress);
@@ -29,7 +29,7 @@ contract usingOracle {
   * @dev Data is the Eth price in USD for this implementation.
   * It could be anything generic too, as long as the data response in a integer.
   */
-  function requestData(uint256 _apiId) internal {
+  function requestData(uint256 _apiId) external {
     uint256 _id;
     address _oracleImpl = oracleAddress;
     bytes memory _calldata = abi.encodeWithSignature('getRequestedData(uint256)', _apiId);

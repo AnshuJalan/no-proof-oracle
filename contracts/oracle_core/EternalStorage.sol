@@ -6,11 +6,11 @@ contract EternalStorage {
   
   mapping(uint256 => address) pendingRequests;
 
-  function getAddressVar(bytes32 _key) internal view returns(address){
+  function getAddressVar(bytes32 _key) public view returns(address){
     return addressVars[_key];
   }
 
-  function getUintVar(bytes32 _key) internal view returns(uint256) {
+  function getUintVar(bytes32 _key) public view returns(uint256) {
     return uintVars[_key];
   }
 

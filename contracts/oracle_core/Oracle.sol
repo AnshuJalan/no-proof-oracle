@@ -4,14 +4,14 @@ import './EternalStorage.sol';
 
 contract Oracle is EternalStorage{
 
-  event NewRequest(uint256 id, uint256 apiId);
+  event NewRequestFromUser(uint256 id, uint256 apiId);
   event DataSubmitted(uint256 id, uint256 data);
 
   function getRequestedData(uint256 _apiId) external returns(uint256){
     uint256 _id = getUintVar(keccak256('requestCount'));
     pendingRequests[_id] = msg.sender;
     setUintVar(keccak256('requestCount'), _id + 1);
-    emit NewRequest(_id, _apiId);
+    emit NewRequestFromUser(_id, _apiId);
     return _id;
   }
 

@@ -4,6 +4,9 @@ import './EternalStorage.sol';
 
 contract OracleProxy is EternalStorage {
 
+  event NewRequestFromUser(uint256 id, uint256 apiId);
+  event DataSubmitted(uint256 id, uint256 data);
+
   constructor(address _implAddress) public {
     setAddressVar(keccak256('owner'), msg.sender);
     setAddressVar(keccak256('oracleAddress'), _implAddress);

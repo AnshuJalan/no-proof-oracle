@@ -17,11 +17,11 @@ contract SampleUsingOracle is UsingOracle {
   * @notice This is Eth price only for this sample. This could be anything else,
   * depending upon your usecase and oracle-server setup.
   */
-  function requestEthPrice() public {
-    latestResponseId = requestData(1);
+  function requestPrice(uint256 _apiId) public {
+    latestResponseId = requestData(_apiId);
   }
 
-  function getEthPrice() public view returns(uint256){
+  function getPrice() public view returns(uint256){
     return latestResponse[latestResponseId];
   }
 } 
